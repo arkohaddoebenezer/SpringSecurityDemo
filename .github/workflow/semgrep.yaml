@@ -1,0 +1,28 @@
+name: Semgrep Java Security Scan
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  semgrep:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3  # Latest version at the time of writing
+
+      - name: Set up Python
+        uses: actions/setup-python@v4  # Updated to latest version compatible with Node.js 20
+        with:
+          python-version: '3.x'
+
+      - name: Install Semgrep
+        run: pip install semgrep
+
+      - name: Run Semgrep
+        run: semgrep --config "p/owasp-top-ten" .
