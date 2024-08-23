@@ -22,7 +22,7 @@ public class Post {
 
     @NotNull(message = "Title cannot be null")
     @NotBlank(message = "Title cannot be blank")
-    @Size(min = 5, max = 100, message = "Title must be between 5 and 100 characters")
+    @Size(min = 3, max = 100, message = "Title must be between 3 and 100 characters")
     @Pattern(regexp = "^[a-zA-Z0-9\\s]+$", message = "Title can only contain letters, numbers, and spaces")
     private String title;
 
