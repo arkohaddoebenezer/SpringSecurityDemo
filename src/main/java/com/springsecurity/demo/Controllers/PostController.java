@@ -1,7 +1,7 @@
-package com.springsecurity.demo.Controller;
+package com.springsecurity.demo.Controllers;
 
 import com.springsecurity.demo.Model.Post;
-import com.springsecurity.demo.Service.MessageService;
+import com.springsecurity.demo.Services.MessageService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,12 +12,12 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/posts")
-public class MessageController {
+public class PostController {
 
     private final MessageService messageService;
 
     @Autowired
-    public MessageController(MessageService messageService) {
+    public PostController(MessageService messageService) {
         this.messageService = messageService;
     }
 

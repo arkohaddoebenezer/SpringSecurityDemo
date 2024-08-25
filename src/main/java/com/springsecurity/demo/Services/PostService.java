@@ -1,4 +1,5 @@
-package com.springsecurity.demo.Service;
+package com.springsecurity.demo.Services;
+
 
 import com.springsecurity.demo.Model.Post;
 import com.springsecurity.demo.Repository.PostRepository;
@@ -9,12 +10,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class MessageService {
+public class PostService {
 
     private final PostRepository postRepository;
 
     @Autowired
-    public MessageService(PostRepository postRepository) {
+    public PostService(PostRepository postRepository) {
         this.postRepository = postRepository;
     }
 
