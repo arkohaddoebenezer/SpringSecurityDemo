@@ -34,6 +34,7 @@ public class CustomSecurityConfiguration {
         http
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/signup", "/login", "/css/**", "/js/**").permitAll()
+                        .requestMatchers("/admin/dashboard").hasRole(Role.ADMIN.toString())
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -62,5 +63,16 @@ public class CustomSecurityConfiguration {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
-
+    @Bean
+    public AuthenticationSuccessHandler customAuthenticationSuccessHandler() {
+        return (request, response, authentication) -> {
+            boolean isAdmin = authentication.getAuthorities().stream()
+                    .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_"+Role.ADMIN.toString()));
+            if (isAdmin) {
+                response.sendRedirect("/admin/dashboard");
+            } else {
+                response.sendRedirect("/dashboard");
+            }
+        };
+    }
 }
