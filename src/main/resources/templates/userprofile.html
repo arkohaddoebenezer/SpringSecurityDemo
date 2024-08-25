@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+          crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <title>Profile</title>
+    <link th:href="@{/css/styles.css}" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>
+        p {
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: .15em solid orange;
+            font-family: monospace;
+            font-size: 3.5em;
+            animation: typing 4s steps(40, end) infinite, blink 0.75s step-end infinite;
+        }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes blink {
+            from, to { border-color: transparent; }
+            50% { border-color: orange; }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <nav>
+        <a style="text-decoration: none; color: #fff;" href="/home" class="logo">Hello World</a>
+        <ul>
+            <li><a href="/tasks/my-tasks">My Tasks</a></li>
+            <li><a href="/logout" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
+            <form id="logout-form" action="/logout" method="POST" style="display: none;">
+                <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+            </form>
+        </ul>
+    </nav>
+</header>
+<section class="bg-light py-3 py-md-5 py-xl-8">
+    <div class="container mb-3">
+        <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <span th:text="${successMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row justify-content-md-center">
+            <div class="col-12 col-md-10 col-lg-8 col-xl-7 col-xxl-6">
+                <h2 class="mb-4 display-5 text-center">Profile</h2>
+                <p class="text-secondary text-center lead fs-4 mb-5" >view and customize your details...</p>
+                <hr class="w-50 mx-auto mb-5 mb-xl-9 border-dark-subtle">
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row gy-4 gy-lg-0">
+            <div class="col-12 col-lg-4 col-xl-3">
+                <div class="row gy-4">
+                    <div class="col-12">
+                        <div class="card widget-card border-light shadow-sm">
+                            <div class="card-header text-bg-primary">Welcome, <span th:text="${user.firstname + ' ' + user.lastname}">User</span></div>
+                            <div class="card-body">
+                                <div class="text-center mb-3">
+                                    <img th:if="${user.profilePicture != null}"
+                                         th:src="@{/profilePicture/{id}(id=${user.id})}"
+                                         alt="Profile Picture" />                                </div>
+                                <h5 class="text-center mb-1" th:text="${user.firstname + ' ' + user.lastname}">User</h5>                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-8 col-xl-9">
+                <div class="card widget-card border-light shadow-sm">
+                    <div class="card-body p-4">
+                        <ul class="nav nav-tabs" id="profileTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="overview-tab" data-bs-toggle="tab" data-bs-target="#overview-tab-pane" type="button" role="tab" aria-controls="overview-tab-pane" aria-selected="true">Overview</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Profile</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="password-tab" data-bs-toggle="tab" data-bs-target="#password-tab-pane" type="button" role="tab" aria-controls="password-tab-pane" aria-selected="false">Password</button>
+                            </li>
+                        </ul>
+                        <div class="tab-content pt-4" id="profileTabContent">
+                            <div class="tab-pane fade show active" id="overview-tab-pane" role="tabpanel" aria-labelledby="overview-tab" tabindex="0">
+                                <h5 class="mb-3">Profile</h5>
+                                <div class="row g-0">
+                                    <div class="col-5 col-md-3 bg-light border-bottom border-white border-3">
+                                        <div class="p-2">First Name</div>
+                                    </div>
+                                    <div class="col-7 col-md-9 bg-light border-start border-bottom border-white border-3">
+                                        <div class="p-2" th:text="${user.firstname}"></div>                                    </div>
+                                    <div class="col-5 col-md-3 bg-light border-bottom border-white border-3">
+                                        <div class="p-2">Last Name</div>
+                                    </div>
+                                    <div class="col-7 col-md-9 bg-light border-start border-bottom border-white border-3">
+                                        <div class="p-2" th:text="${user.lastname}"></div>                                    </div>
+                                    <div class="col-5 col-md-3 bg-light border-bottom border-white border-3">
+                                        <div class="p-2">Email</div>
+                                    </div>
+                                    <div class="col-7 col-md-9 bg-light border-start border-bottom border-white border-3">
+                                        <div class="p-2" th:text="${user.email}"></div>                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+                                <form id="profileForm" action="#" th:action="@{/profile}" method="post" th:object="${user}" class="row gy-3 gy-xxl-4">
+                                    <div class="col-12">
+                                        <div class="row gy-2">
+                                            <label class="col-12 form-label m-0">Profile Image</label>
+                                            <div class="col-12">
+                                                <img th:if="${user.profilePicture != null}"
+                                                     th:src="@{/profilePicture/{id}(id=${user.id})}"
+                                                     alt="Profile Picture" />                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <label for="firstname" class="form-label">First Name</label>
+                                        <input required type="text" class="form-control" id="firstname" th:field="*{firstname}">
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <label for="lastname" class="form-label">Last Name</label>
+                                        <input required type="text" class="form-control" id="lastname" th:field="*{lastname}">
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <label for="email" class="form-label">Email</label>
+                                        <input readonly type="email" class="form-control" id="email" th:field="*{email}">
+                                    </div>
+                                    <div class="col-12">
+                                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="tab-pane fade" id="password-tab-pane" role="tabpanel" aria-labelledby="password-tab" tabindex="0">
+                                <div th:if="${passwordSuccess}" class="alert alert-success alert-dismissible fade show" role="alert">
+                                    <span th:text="${passwordSuccess}"></span>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                                <div th:if="${passwordError}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <span th:text="${passwordError}"></span>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                                <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <span th:text="${error}"></span>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                                <form id="passwordForm" action="#" th:action="@{/change-password}" method="post">
+                                    <div class="row gy-3 gy-xxl-4">
+                                        <div class="col-12">
+                                            <label for="currentPassword" class="form-label">Current Password</label>
+                                            <input type="password" class="form-control" id="currentPassword" name="currentPassword" required>
+                                        </div>
+                                        <div class="col-12">
+                                            <label for="newPassword" class="form-label">New Password</label>
+                                            <input type="password" class="form-control" id="newPassword" name="newPassword" required>
+                                        </div>
+                                        <div class="col-12">
+                                            <label for="confirmPassword" class="form-label">Confirm Password</label>
+                                            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+                                        </div>
+                                        <div class="col-12">
+                                            <button type="submit" class="btn btn-primary">Change Password</button>
+                                        </div>
+                                    </div>
+                                    <div th:if="${error != null}" class="text-danger" th:text="${error}"></div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
+</script>
+<script th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        var activeTab = /*[[${activeTab}]]*/ null;
+        var successMessage = /*[[${successMessage}]]*/ null;
+        var passwordSuccess = /*[[${passwordSuccess}]]*/ null;
+        var passwordError = /*[[${passwordError}]]*/ null;
+        var error = /*[[${passwordError}]]*/ null;
+
+        if (activeTab === 'password' || passwordSuccess || passwordError || error) {
+            var passwordTab = new bootstrap.Tab(document.querySelector('#password-tab'));
+            passwordTab.show();
+        } else if (successMessage) {
+            var profileTab = new bootstrap.Tab(document.querySelector('#profile-tab'));
+            profileTab.show();
+        }
+
+        // Scroll to the message if it exists
+        var messageElement = document.querySelector('.alert');
+        if (messageElement) {
+            messageElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello World</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <link th:href="@{/css/styles.css}" rel="stylesheet" />
+</head>
+
+<body>
+<header>
+    <nav>
+        <ul>
+            <li><a href="/profile">Profile</a></li>
+            <li><a href="/logout" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
+        </ul>
+    </nav>
+    <form id="logout-form" th:action="@{/logout}" method="POST" style="display: none;">
+        <!-- CSRF Token for security -->
+        <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+    </form>
+</header>
+
+<main class="dashboard">
+    <!-- Greeting Section -->
+    <section class="welcome">
+        <h1 th:id="greeting">Good day, <span th:text="${username}">User</span>!</h1>
+    </section>
+
+    <!-- Post Form Section -->
+    <section class="post-form">
+        <h2>What's on your mind?</h2>
+        <form th:action="@{/post}" method="POST">
+            <textarea name="content" placeholder="Share your thoughts..." required></textarea>
+            <button type="submit" class="btn">Post</button>
+        </form>
+    </section>
+
+    <!-- Posts Section -->
+    <section class="posts">
+        <h2>Community Posts</h2>
+        <div th:each="post : ${posts}" th:classappend="${post.username} == ${username} ? 'user-post' : ''">
+            <div class="post">
+                <p th:text="${post.content}">This is a post content.</p>
+                <div class="post-meta">
+                    <span th:text="${post.username}">Username</span> -
+                    <span th:text="${post.timestamp}">Timestamp</span>
+                </div>
+                <div class="post-actions">
+                    <button class="like-btn"><i class="fa-solid fa-thumbs-up"></i> <span th:text="${post.likes}">0</span></button>
+                    <button class="dislike-btn"><i class="fa-solid fa-thumbs-down"></i> <span th:text="${post.dislikes}">0</span></button>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Determine the time of day and set the greeting message
+        const now = new Date();
+        const hours = now.getHours();
+        let greeting = 'Good day';
+
+        if (hours < 12) {
+            greeting = 'Good morning';
+        } else if (hours < 18) {
+            greeting = 'Good afternoon';
+        } else {
+            greeting = 'Good evening';
+        }
+
+        const username = document.querySelector('.welcome span').textContent;
+        document.getElementById('greeting').textContent = `${greeting}, ${username}!`;
+    });
+</script>
+
+</body>
+
+</html>
