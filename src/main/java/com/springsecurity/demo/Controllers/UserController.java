@@ -110,15 +110,5 @@ public class UserController {
         }
     }
 
-    @GetMapping("/profilePicture/{id}")
-    public ResponseEntity<byte[]> getProfilePicture(@PathVariable Long id) {
-        User user = userService.findById(id);
-        if (user != null && user.getProfilePicture() != null) {
-            return ResponseEntity.ok()
-                    .contentType(MediaType.IMAGE_JPEG)
-                    .body(user.getProfilePicture());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
+
 }
