@@ -1,5 +1,6 @@
 package com.springsecurity.demo.Services;
 
+import com.springsecurity.demo.Enums.Role;
 import com.springsecurity.demo.Repository.UserRepository;
 import com.springsecurity.demo.Model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 public class UserService {
@@ -75,7 +77,15 @@ public class UserService {
         } else {
             username = principal.toString();
         }
-        return userRepository.findByEmail(username);
+//        return userRepository.findByEmail(username);
+        User user = new User();
+        user.setLastname("Addo");
+        user.setEmail("Ebenezer@"+ThreadLocalRandom.current().nextInt(1000, 10000)+".com");
+        user.setPassword(bCryptPasswordEncoder.encode("oauth2user"));
+        user.setRole("ROLE_"+ Role.USER.toString());
+        userRepository.save(user);
+        return user;
+
     }
 
     public boolean emailExists(String email) {
